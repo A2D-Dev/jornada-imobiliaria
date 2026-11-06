@@ -1,0 +1,33 @@
+<h1>Cadastro de Pessoas</h1>
+<p>Gerenciamento de pessoas físicas e jurídicas.</p>
+<p>Tipo de pessoa selecionado: {{ tipoPessoa() }}</p>
+<div>
+  <button (click)="selecionarPF()">Cadastro PF</button>
+  <button (click)="selecionarPJ()">Cadastro PJ</button>
+  <button (click)="validarDocumento()">Validar Documento</button>
+</div>
+
+<div>
+  <label for="nome">{{ tipoPessoa() === 'PF' ? 'Nome completo' : 'Razão Social' }}</label>
+  <input
+    type="text"
+    id="nome"
+    [placeholder]="tipoPessoa() === 'PF' ? 'Digite nome completo' : 'Digite Razão Social'"
+    (input)="nome.set($any($event.target).value)"    
+    [value]="nome()"    
+  >  
+  <p>Nome informado: {{ nome() }}</p>  
+</div>
+
+<div>
+  <label for="cpf">{{ tipoPessoa() === 'PF' ? 'CPF' : 'CNPJ' }}</label>
+  <input 
+    type="text"
+    id="cpf" 
+    [placeholder]="tipoPessoa() === 'PF' ? 'Digite CPF' : 'Digite CNPJ'"
+    (input)="atualizarDocumento($any($event.target).value)" 
+    [value]="documento()"
+    (blur)="validarDocumento()"
+  >
+  <p>{{ erroCampoDocumento() }}</p>
+</div>
