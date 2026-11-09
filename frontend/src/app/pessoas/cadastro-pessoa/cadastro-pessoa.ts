@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { signal } from '@angular/core';
+import { Component, computed,signal } from '@angular/core';
+
 @Component({
   imports: [],
   selector: 'app-cadastro-pessoa',
@@ -11,14 +11,43 @@ export class CadastroPessoa {
   protected readonly nome = signal('');
   protected readonly documento = signal('');
   protected readonly erroCampoDocumento = signal('');
+  protected readonly abaSelecionada = signal('identificacao');
+  protected readonly email = signal('');
+  
+  protected readonly pendenciasIdentificacao = computed(() => {
+    let pendencias = 0;
+
+    if (this.nome() === '') {
+      pendencias++;
+    }
+
+    if (this.tipoPessoa() === 'PF') {
+      if (this.documento() === '' || this.documento().length !== 11) {
+        pendencias++;
+      }
+    }
+    else if (this.tipoPessoa() === 'PJ') {
+      if (this.documento() === '' || this.documento().length !== 14) {
+        pendencias++;
+      }
+    }
+
+    return pendencias;
+  });
 
   selecionarPJ(){
     this.tipoPessoa.set('PJ');
+    this.validarDocumento();
   }
 
   selecionarPF(){
     this.tipoPessoa.set('PF');
+    this.validarDocumento();
   }  
+
+  selecionarAba(aba : string){
+    this.abaSelecionada.set(aba);
+  }
 
   atualizarDocumento(documento: string) {
     this.documento.set(documento);
