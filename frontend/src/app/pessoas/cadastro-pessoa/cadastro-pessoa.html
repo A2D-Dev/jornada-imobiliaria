@@ -52,7 +52,7 @@
         id="cpf" 
         [placeholder]="tipoPessoa() === 'PF' ? 'Digite CPF' : 'Digite CNPJ'"
         (input)="atualizarDocumento($event)"
-        [value]="tipoPessoa() === 'PF' ? formatarCpf(documento()) : documento()"
+        [value]="tipoPessoa() === 'PF' ? formatarCpf(cpf()) : formatarCnpj(cnpj())"
         (blur)="validarDocumento()"
       >
       <p>{{ erroCampoDocumento() }}</p>
