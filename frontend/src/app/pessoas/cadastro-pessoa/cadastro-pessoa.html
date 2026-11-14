@@ -14,7 +14,16 @@
       <span class="concluido">✓</span>
     }
   </button>
-  <button class="aba" (click)="selecionarAba('contatos')" [class.ativa]="abaSelecionada() === 'contatos'">Contatos</button>
+  <button class="aba"
+    (click)="selecionarAba('contatos')"
+    [class.ativa]="abaSelecionada() === 'contatos'">
+    Contatos
+    @if (pendenciasContatos() > 0) {
+      <span class="contador">{{ pendenciasContatos() }}</span>
+    } @else {
+      <span class="concluido">✓</span>
+    }
+  </button>
   
   <p>Aba atual: {{ abaSelecionada() }}</p>
   @if (abaSelecionada() === 'identificacao') {
@@ -42,8 +51,8 @@
         type="text"
         id="cpf" 
         [placeholder]="tipoPessoa() === 'PF' ? 'Digite CPF' : 'Digite CNPJ'"
-        (input)="atualizarDocumento($any($event.target).value)" 
-        [value]="documento()"
+        (input)="atualizarDocumento($event)"
+        [value]="tipoPessoa() === 'PF' ? formatarCpf(documento()) : documento()"
         (blur)="validarDocumento()"
       >
       <p>{{ erroCampoDocumento() }}</p>
