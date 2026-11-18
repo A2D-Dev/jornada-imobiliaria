@@ -14,6 +14,7 @@ export class CadastroPessoa {
   protected readonly erroCampoDocumento = signal('');
   protected readonly abaSelecionada = signal('identificacao');
   protected readonly email = signal('');
+  protected readonly erroCampoEmail = signal('');
   
   protected readonly pendenciasIdentificacao = computed(() => {
     let pendencias = 0;
@@ -39,7 +40,7 @@ export class CadastroPessoa {
   protected readonly pendenciasContatos = computed(() => {
     let pendencias = 0;
 
-    if (this.email() === '') {
+    if (!this.validarEmail(this.email())) {
       pendencias++;
     }
     return pendencias;
@@ -409,6 +410,12 @@ export class CadastroPessoa {
       return false;
     }
 
+    const partes = emailLimpo.split('@');
+
+    if (partes.length !== 2 || !partes[1].includes('.')) {
+      return false;
+    }
+
     // Cria um campo temporário para validar o formato.
     const campo = document.createElement('input');
     campo.type = 'email';
@@ -416,5 +423,15 @@ export class CadastroPessoa {
 
     // Devolve o resultado da validação do navegador.
     return campo.validity.valid;
+  }
+
+  validarCampoEmail() {
+    if (this.email().trim() === '') {
+      this.erroCampoEmail.set('Informe o e-mail.');
+    } else if (!this.validarEmail(this.email())) {
+      this.erroCampoEmail.set('E-mail inválido. Verifique o endereço informado.');
+    } else {
+      this.erroCampoEmail.set('');
+    }
   }
 }
